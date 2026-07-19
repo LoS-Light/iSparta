@@ -2,9 +2,10 @@
 
 import { app, protocol, BrowserWindow, ipcMain,dialog } from 'electron'
 import {
-  createProtocol,
-  installVueDevtools
+  createProtocol
 } from 'vue-cli-plugin-electron-builder/lib'
+import { initialize as initRemote, enable as enableRemote } from '@electron/remote/main'
+initRemote()
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const path = require("path");
 // Keep a global reference of the window object, if you don't, the window will
@@ -28,9 +29,11 @@ function createWindow () {
     show: false,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       webSecurity: false
     } })
-  
+  enableRemote(win.webContents)
+
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -110,18 +113,18 @@ ipcMain.on('change-item-fold', function (event, path, order) {
   dialog.showOpenDialog({
     defaultPath: path,
     properties: ['openDirectory']
-  }, function (files) {
-    if (files) event.sender.send('change-item-fold', files, order)
+  }).then(function (result) {
+    if (!result.canceled && result.filePaths.length) event.sender.send('change-item-fold', result.filePaths, order)
   })
 })
 // 监听输出到目录的操作
 ipcMain.on('change-multiItem-fold', function (event, path) {
-  
+
   dialog.showOpenDialog({
     defaultPath: path,
     properties: ['openDirectory']
-  }, function (files) {
-    if (files) event.sender.send('change-multiItem-fold', files)
+  }).then(function (result) {
+    if (!result.canceled && result.filePaths.length) event.sender.send('change-multiItem-fold', result.filePaths)
   })
 })
 // 监听获取应用目录的操作

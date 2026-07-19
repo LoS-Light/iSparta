@@ -40,7 +40,7 @@ const imgType = _.values(typeData).join(',')
 // console.log(imgType)
 
 const ipc = require('electron').ipcRenderer
-const {dialog} = require('electron').remote
+const {dialog} = require('@electron/remote')
 import DelayDialog from  '../delayDialog/index.vue'
 import { f as fsOperate } from '../drag/file.js'
 export default {
@@ -195,9 +195,9 @@ export default {
       ipc.send('change-item-fold', outputPath, index)
     },
     openFolder(){
-      dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory', 'multiSelections' ]}, (res) => {
-        this.muFileList = res
-        if(!this.muFileList){return false;}
+      dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory', 'multiSelections' ]}).then((result) => {
+        this.muFileList = result.filePaths
+        if(result.canceled || !this.muFileList || !this.muFileList.length){return false;}
         fsOperate.readerFiles(this.muFileList).then((ars) => {
           var Obj = {}
           for (var i in ars) {

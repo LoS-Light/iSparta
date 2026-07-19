@@ -1,6 +1,7 @@
 module.exports = {
     "uploadTips": "Drop file here or click to upload",
     "uploadRule": "Support for PNGs、APNG、WEBP、GIF",
+    "noImportableFiles": "No importable images found (note: static PNGs need at least two same-prefix frames to build an APNG)",
     //function
     "confrim":"Confrim",
     "cancel":"Cancel",

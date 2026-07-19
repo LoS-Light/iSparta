@@ -21,7 +21,7 @@
 import { f as fsOperate } from '../drag/file.js'
 import * as d from '../drag/drag.js'
 
-const {dialog} = require('electron').remote
+const {dialog} = require('@electron/remote')
 
 export default {
   data () {
@@ -43,10 +43,14 @@ export default {
       return false
     },
     upFile (filsList) {
-      dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory', 'multiSelections' ]}, (res) => {
-        this.muFileList = res
-        if(!this.muFileList){return false;}
+      dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory', 'multiSelections' ]}).then((result) => {
+        this.muFileList = result.filePaths
+        if(result.canceled || !this.muFileList || !this.muFileList.length){return false;}
         fsOperate.readerFiles(this.muFileList).then((ars) => {
+          if (!ars.length) {
+            this.$message.warning(this.$t('noImportableFiles'))
+            return
+          }
           var Obj = {}
           for (var i in ars) {
             Obj.basic = ars[i].basic

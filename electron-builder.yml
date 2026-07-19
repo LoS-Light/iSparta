@@ -11,9 +11,9 @@ win:
   icon: ./public/icons/icon.ico
 mac:
   target:
-    - target: dmg
+    - target: zip
       arch:
-        - x64
+        - arm64
   icon: ./public/icons/icon.icns
 linux:
   target:

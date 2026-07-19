@@ -44,9 +44,11 @@ export default class Action {
     } else {
       var bin = path.join(basePath, '/bin/', pf, exec)
     }
-    Process.exec("chmod -R +x " +bin);
     if (pf == 'win32' || pf == 'win64') {
       bin = bin + '.exe'
+    } else {
+      // 打包时可执行权限可能丢失，须在执行前同步补上
+      try { Process.execSync('chmod +x "' + bin + '"') } catch (e) {}
     }
     bin = "\""+bin+"\"";
     

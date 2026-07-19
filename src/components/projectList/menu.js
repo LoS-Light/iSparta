@@ -1,8 +1,8 @@
 // 右键菜单
 // import processor from '../../util/processor'
 
-const remote = require('electron').remote
-const shell = require('electron').shell
+const remote = require('@electron/remote')
+const shell = remote.shell
 const ipc = require('electron').ipcRenderer
 const {
   Menu,
@@ -54,7 +54,7 @@ class rightMenu {
     //   }
     // }))
     // setTimeout(function(){
-    menu.popup(remote.getCurrentWindow())
+    menu.popup({ window: remote.getCurrentWindow() })
     // },10)
   }
 }

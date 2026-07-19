@@ -1,6 +1,7 @@
 module.exports = {
     "uploadTips": "将文件拖入或点击打开",
     "uploadRule": "只能上传PNG序列、APNG、WEBP、GIF这四种图片格式",
+    "noImportableFiles": "未找到可导入的图片（注意：单张静态PNG需要至少两张同名序列才能合成APNG）",
     //function
     "confrim":"确定",
     "cancel":"取消",
